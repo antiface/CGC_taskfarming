@@ -16,8 +16,6 @@ class EC2Binding:
       image = [i for i in conn.list_images() if i.id == self.ami ][0]
       size = [s for s in conn.list_sizes() if s.id == instance_type ][0]
 
-      print "Image chosen = " + image 
-      print "Size chosen = " + size
 
       key_name = 'gigg'
 
