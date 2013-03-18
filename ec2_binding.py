@@ -16,6 +16,9 @@ class EC2Binding:
       image = [i for i in conn.list_images() if i.id == self.ami ][0]
       size = [s for s in conn.list_sizes() if s.id == instance_type ][0]
 
+      print "Image chosen = " + image 
+      print "Size chosen = " + size
+
       key_name = 'gigg'
 
       key_path = '/root/gigg.pem'
@@ -28,8 +31,8 @@ class EC2Binding:
 
     def end_instance(self, instance):
 
-      EC2_ACCESS_ID = '9574-1557-8438'
-      EC2_SECRET = '58C2nGy1Qf/ysMJepLjuYK2fDOrQGByxlktaMG8D'
+      EC2_ACCESS_ID = self.accesskey
+      EC2_SECRET = self.secretkey
 
       Driver = get_driver(Provider.EC2_US_EAST)
       conn = Driver(EC2_ACCESS_ID, EC2_SECRET)
