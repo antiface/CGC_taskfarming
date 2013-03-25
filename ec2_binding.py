@@ -1,6 +1,7 @@
 import ConfigParser
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
+from libcloud.compute.deployment import ScriptDeployment
 
 class EC2Binding:
     ''' EC2 binding for this distributed execution system '''
@@ -21,8 +22,7 @@ class EC2Binding:
 
       key_path = '/root/gigg.pem'
 
-
-      node = conn.deploy_node(name='test', image=image, size=size, deploy=script,ssh_username='root', ssh_key=key_path,ex_keyname=key_name)
+      node = conn.deploy_node(name='test', image=image, size=size, deploy=ScriptDeployment(script),ssh_username='root', ssh_key=key_path,ex_keyname=key_name, timeout=6000)
 
       return node
 
@@ -35,7 +35,7 @@ class EC2Binding:
       Driver = get_driver(Provider.EC2_US_EAST)
       conn = Driver(EC2_ACCESS_ID, EC2_SECRET)
 
-      destroy_node(instance)
+      conn.destroy_node(instance)
        
 
     def __init__(self):
