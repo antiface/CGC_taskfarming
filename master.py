@@ -3,6 +3,7 @@
 import sys, ConfigParser
 from scheduler import Scheduler
 from proto import Job
+import datetime
 
 def main(argv=None):
     if argv is None:
@@ -27,8 +28,13 @@ def main(argv=None):
     for i in range(0, len(lines)):
         bot[i] = Job(lines[i].strip(), i)
     
+    start_time = datetime.datetime.now();
+
     scheduler = Scheduler(bot, instance_num, instance_type, server_ip, 
             server_port, jobs_log_dir)
+
+    end_time = datetime.datetime.now();
+    print "Execution took %d microseconds" % (end_time.microsecond - start_time.microsecond)
 
 if __name__ == "__main__":
     sys.exit(main())
