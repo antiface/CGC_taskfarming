@@ -22,7 +22,12 @@ class EC2Binding:
 
       key_path = '/root/gigg.pem'
 
-      node = conn.deploy_node(name='test', image=image, size=size, deploy=ScriptDeployment(script),ssh_username='root', ssh_key=key_path,ex_keyname=key_name, timeout=6000)
+      locations = conn.list_locations()
+      for location in locations:
+        if location.availability_zone.name == 'us-east-1d':
+          break;
+
+      node = conn.deploy_node(name='test',location=location, image=image, size=size, deploy=ScriptDeployment(script),ssh_username='root', ssh_key=key_path,ex_keyname=key_name, timeout=6000)
 
       return node
 
