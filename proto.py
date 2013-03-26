@@ -51,6 +51,7 @@ class CustomClientFactory(pb.PBClientFactory):
     
     def clientConnectionFailed(self, connector, reason):
         print 'Connection failed'
+	print(reason)
         try:
             reactor.stop()
         except:
