@@ -67,6 +67,15 @@ class Scheduler(ServerMechanism):
         
         return schedules
 
+    def start_vms(self, vm_num):
+        
+        self.ec2 = EC2Binding()
+        for i in range(int(vm_num)):
+            start_up_script = self.generate_client_script(self.instance_type, i)
+            instance = self.ec2.start_instance(self.instance_type, 
+                    start_up_script)
+            self.instances.append(instance)
+
     def __init__(self, bot, vm_num, instance_type, ip, port, worker_log_dir):
 
         super(Scheduler, self).__init__(ip, port, bot, worker_log_dir)
@@ -78,11 +87,7 @@ class Scheduler(ServerMechanism):
         self.instances = []
         
         # Start up the VMs
-        self.ec2 = EC2Binding()
-        for i in range(int(vm_num)):
-            start_up_script = self.generate_client_script(instance_type, i)
-            instance = self.ec2.start_instance(instance_type, start_up_script)
-            self.instances.append(instance)
+        threads.deferToThread(self.start_vms, vm_num)
 
         # Start up the server
         self.start_server()
