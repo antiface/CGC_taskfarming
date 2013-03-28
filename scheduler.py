@@ -71,10 +71,14 @@ class Scheduler(ServerMechanism):
         
         self.ec2 = EC2Binding()
         for i in range(int(vm_num)):
+            print "starting node " + i
             start_up_script = self.generate_client_script(self.instance_type, i)
+            print "generated startup script"
             instance = self.ec2.start_instance(self.instance_type, 
                     start_up_script)
+            print "started instance!"
             self.instances.append(instance)
+            print "appended instance"
 
     def __init__(self, bot, vm_num, instance_type, ip, port, worker_log_dir):
 
