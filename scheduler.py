@@ -50,11 +50,15 @@ class Scheduler(ServerMechanism):
 
         # Naive scheduling
         schedules = {}
+        joblist = [];
         if len(jobs_ready) != 0:
-            job = jobs_ready[0]
+          for i in range(10):
+            job = jobs_ready[1]
             job.status = 'exec'
-            schedules[node] = [job]
+            joblist.append(job);
 
+        schedules[node] = joblist
+        
         jobs_size = 0
         print_str = 'Schedules:\n'
         for node, jobs in schedules.iteritems():
