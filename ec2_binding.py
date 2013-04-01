@@ -22,14 +22,12 @@ class EC2Binding:
 
       key_name = 'gigg'
 
-      key_path = '/root/gigg.pem'
-
       locations = conn.list_locations()
       for location in locations:
         if location.availability_zone.name == 'us-east-1d':
           break;
 
-      node = conn.create_node(name="node", location=location, image=image, size=size, ex_securitygroup = securitygroup, ex_userdata=script)
+      node = conn.create_node(name="node", location=location, image=image, size=size, ex_keyname = key_name, ex_securitygroup = securitygroup, ex_userdata=script)
 
       return node
 
