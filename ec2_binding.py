@@ -29,8 +29,6 @@ class EC2Binding:
         if location.availability_zone.name == 'us-east-1d':
           break;
 
-      #node = conn.deploy_node(name='test',location=location, image=image, size=size, ex_securitygroup = securitygroup, deploy=ScriptDeployment(script),ssh_username='root', ssh_key=key_path,ex_keyname=key_name, timeout=6000)
-      
       node = conn.create_node(name="node", location=location, image=image, size=size, ex_securitygroup = securitygroup, ex_userdata=script)
 
       return node
