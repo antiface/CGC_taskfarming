@@ -52,7 +52,7 @@ class Scheduler(ServerMechanism):
         schedules = {}
         joblist = [];
         if len(jobs_ready) != 0:
-	        for i in range(len(jobs_ready)):
+	  for i in range(len(jobs_ready)):
             job = jobs_ready[i]
             job.status = 'exec'
             joblist.append(job);

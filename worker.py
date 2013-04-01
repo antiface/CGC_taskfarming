@@ -1,3 +1,4 @@
+import ConfigParser
 from twisted.internet import reactor
 from twisted.internet.protocol import Factory, Protocol
 from proto import *
@@ -18,17 +19,12 @@ class Client:
                 raise
 
     def dump_streams(self, out, err, msg):
-        config = ConfigParser.ConfigParser()
-        config.read('config.ini')
-        try:
-            self.accesskey = config.get('ec2', 'accesskey')
-            self.secretkey = config.get('ec2', 'secretkey')
-        except ConfigParser.NoOptionError:
-            raise Exception('[-] missing config item in the "ec2" section')
 
+	accesskey = "AKIAJY63UHI6OXXONVTQ"
+	secretkey = "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"
 
-        Driver = get_driver(Provider.EC2_US_EAST)
-        conn = Driver(self.acceskey, self.secretkey)
+        Driver = get_driver(Provider.S3)
+        conn = Driver(accesskey, secretkey)
 
         jobfolder = os.path.join(self.base, str(msg.job.job_id))
         self.mkdir(jobfolder)
@@ -43,8 +39,8 @@ class Client:
         f.close()
 
         
-        container = conn.create_container("taskfarm");
-        conn.upload_object(jobfolder, container, str(msg.job.job_id);
+        container = conn.create_container("taskfarm")
+        conn.upload_object(jobfolder, container, str(msg.job.job_id))
 
 
     def execute(self, msg):
