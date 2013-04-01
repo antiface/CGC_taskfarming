@@ -3,6 +3,8 @@ from twisted.internet.protocol import Factory, Protocol
 from proto import *
 import sys, os, errno, subprocess
 from subprocess import Popen
+from libcloud.storage.providers import get_driver
+from libcloud.storage.types import Provider, ContainerDoesNotExistError
 
 class Client:
     
@@ -16,6 +18,18 @@ class Client:
                 raise
 
     def dump_streams(self, out, err, msg):
+        config = ConfigParser.ConfigParser()
+        config.read('config.ini')
+        try:
+            self.accesskey = config.get('ec2', 'accesskey')
+            self.secretkey = config.get('ec2', 'secretkey')
+        except ConfigParser.NoOptionError:
+            raise Exception('[-] missing config item in the "ec2" section')
+
+
+        Driver = get_driver(Provider.EC2_US_EAST)
+        conn = Driver(self.acceskey, self.secretkey)
+
         jobfolder = os.path.join(self.base, str(msg.job.job_id))
         self.mkdir(jobfolder)
         f = open(os.path.join(jobfolder, 'out'), 'w')
@@ -27,6 +41,11 @@ class Client:
         f = open(os.path.join(jobfolder, 'param'), 'w')
         f.write(msg.job.command)
         f.close()
+
+        
+        container = conn.create_container("taskfarm");
+        conn.upload_object(jobfolder, container, str(msg.job.job_id);
+
 
     def execute(self, msg):
         p = Popen(msg.job.command, stdout=subprocess.PIPE, 
