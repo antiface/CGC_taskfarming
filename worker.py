@@ -20,11 +20,20 @@ class Client:
 
     def dump_streams(self, out, err, msg):
 
-	accesskey = "AKIAJY63UHI6OXXONVTQ"
-	secretkey = "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"
+      '''
+        ***********************************************************
+        The code commented out in this section is what we thought
+        would enable us to store the results on S3.
+        Unfortunately we did not get it working within the alloted
+        time frame. 
+        **********************************************************
+
+	      accesskey = "xxx"
+	      secretkey = "xxx"
 
         Driver = get_driver(Provider.S3)
         conn = Driver(accesskey, secretkey)
+      '''
 
         jobfolder = os.path.join(self.base, str(msg.job.job_id))
         self.mkdir(jobfolder)
@@ -39,8 +48,10 @@ class Client:
         f.close()
 
         
+        '''
         container = conn.create_container("taskfarm")
         conn.upload_object(jobfolder, container, str(msg.job.job_id))
+        '''
 
 
     def execute(self, msg):
